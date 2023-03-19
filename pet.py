@@ -59,5 +59,7 @@ class Pet:
         self.set_state(response_state)
         with open('doc/output.txt', 'a') as f:
             sys.stdout = f
+            print(query)
             print(response)
+            print('\n')
         speak(response, lambda: self.set_state(end_state))

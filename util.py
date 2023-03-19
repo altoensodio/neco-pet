@@ -33,7 +33,7 @@ class WeightedRandomMap:
 def openai_query(message):
     load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")
-    response = openai.Completion.create(model="text-davinci-003", prompt=message, temperature=1.2, max_tokens=1000)
+    response = openai.Completion.create(model="text-davinci-003", prompt=message, temperature=.95, max_tokens=1000)
     return response["choices"][0]["text"]
 
 def speak(message, callback):
