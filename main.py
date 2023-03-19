@@ -7,7 +7,7 @@ import sys
 if len(sys.argv) >= 2:
     CONFIG_PATH = sys.argv[1]
 else:
-    CONFIG_PATH = "assets\\bonzi\\"
+    CONFIG_PATH = "assets\\neco_arc\\"
 
 def create_event_func(event, pet):
     if event["type"] == "state_change":

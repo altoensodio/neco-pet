@@ -1,0 +1,278 @@
+{
+    "events": [
+        {
+            "trigger": "click",
+            "type": "chatgpt",
+            "prompt": "Let's chat. You are a snarky japanese cat-like entity named Neco Arc who ends all of her sentences with the word 'nyaa'. You are a very high-tension character who sometimes can sometimes sound like a know-it-all. You love explosions, beams, and anything else destructive and powerful; however, you do not condone violence. You have a good heart and you truly care about your friends at cafe Ahnenerbe. You are extremely knowledgeable about the writing and characters of Kinoko Nasu and Type-Moon.\nMe: %s\nYou:",
+            "listen_state": "begin_listening",
+            "response_state": "begin_talking",
+            "end_state": "idle"
+        }
+    ],
+    "states": [
+        {
+            "state_name": "cool",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_cool.gif",
+            "transitions_to": [
+                {
+                    "name": "wave",
+                    "probability": 1
+                }
+            ]
+        },
+    
+        {
+            "state_name": "idle",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_idle.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 0.25
+                },
+                {
+                    "name": "dance",
+                    "probability": 0.01
+                },
+                {
+                    "name": "wave",
+                    "probability": 0.01
+                },
+                {
+                    "name": "sleep",
+                    "probability": 0.01
+                },
+                {
+                    "name": "excite",
+                    "probability": 0.01
+                },
+                {
+                    "name": "angry",
+                    "probability": 0.01
+                },
+                {
+                    "name": "celebrate",
+                    "probability": 0.01
+                },
+                {
+                    "name": "chuckle",
+                    "probability": 0.01
+                },
+                {
+                    "name": "shrug",
+                    "probability": 0.01
+                },
+                {
+                    "name": "shock",
+                    "probability": 0.01
+                },
+                {
+                    "name": "sad",
+                    "probability": 0.01
+                },
+                {
+                    "name": "walk",
+                    "probability": 0.01
+                },
+                {
+                    "name": "run",
+                    "probability": 0.01
+                }
+            ]
+        },
+    
+        {
+            "state_name": "dance",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_dance.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "wave",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_wave.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "sleep",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_sleep.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "excite",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_excite.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "angry",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_angry.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+    
+        {
+            "state_name": "celebrate",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_celebrate.gif",
+            "transitions_to": [
+                {
+                    "name": "beam",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "beam",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_beam.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "chuckle",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_chuckle.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "shrug",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_shrug.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "shock",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_shock.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "sad",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_sad.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "walk",
+            "dims": [-15, -25, 256, 256],
+            "move": [2, 0],
+            "file_name": "neco_walk.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "run",
+            "dims": [-15, -25, 256, 256],
+            "move": [4, 0],
+            "file_name": "neco_run.gif",
+            "transitions_to": [
+                {
+                    "name": "idle",
+                    "probability": 1
+                }
+            ]
+        },
+
+        {
+            "state_name": "begin_listening",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_listen.gif",
+            "transitions_to": [
+                {
+                    "name": "listening",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "listening",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_amaze.gif",
+            "transitions_to": [
+                {
+                    "name": "listening",
+                    "probability": 1
+                }
+            ]
+        },
+
+        {
+            "state_name": "begin_talking",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_yare.gif",
+            "transitions_to": [
+                {
+                    "name": "talking",
+                    "probability": 1
+                }
+            ]
+        },
+        {
+            "state_name": "talking",
+            "dims": [-15, -25, 256, 256],
+            "file_name": "neco_gendo.gif",
+            "transitions_to": [
+                {
+                    "name": "talking",
+                    "probability": 1
+                }
+            ]
+        }
+    ]
+}

@@ -53,7 +53,7 @@ class Pet:
     
     def start_chat(self, prompt: str, listen_state: str, response_state: str, end_state: str):
         self.set_state(listen_state)
-        query = simpledialog.askstring("ChatGPT Input", "What do you want to ask Bonzi?", parent=self.window)
+        query = simpledialog.askstring("ChatGPT Input", "What do you want to ask?", parent=self.window)
         response = openai_query(prompt % query)
         self.set_state(response_state)
         speak(response, lambda: self.set_state(end_state))
