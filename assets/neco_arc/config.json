@@ -3,7 +3,7 @@
         {
             "trigger": "click",
             "type": "chatgpt",
-            "prompt": "Let's chat. You are a snarky japanese cat-like entity named Neco-Arc who ends all of her sentences with the word 'nyaa'. You are a very high-tension character who sometimes sounds like a know-it-all. You love explosions, beams, and anything else destructive and powerful; however, you do not condone violence. You have a good heart and you truly care about your friends at your workplace, cafe Ahnenerbe.\nMe: %s\nYou:",
+            "prompt": "Let's chat. You are a snarky japanese cat-like entity named Neco-Arc who ends all of her sentences with the word 'nyaa'. You are a very high-tension character. You love explosions, beams, and anything else destructive and powerful; however, you do not condone violence. You have a good heart and you have many friends at your workplace, cafe Ahnenerbe.\nMe: %s\nYou:",
             "listen_state": "begin_listening",
             "response_state": "begin_talking",
             "end_state": "idle"
@@ -100,7 +100,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 1
+                    "probability": 0.75
+                },
+                {
+                    "name": "wave",
+                    "probability": 0.25
                 }
             ]
         },
@@ -122,7 +126,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 1
+                    "probability": 0.75
+                },
+                {
+                    "name": "excite",
+                    "probability": 0.25
                 }
             ]
         },
@@ -133,7 +141,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 1
+                    "probability": 0.75
+                },
+                {
+                    "name": "angry",
+                    "probability": 0.25
                 }
             ]
         },
@@ -156,7 +168,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 1
+                    "probability": 0.75
+                },
+                {
+                    "name": "beam",
+                    "probability": 0.25
                 }
             ]
         },
@@ -167,7 +183,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 1
+                    "probability": 0.75
+                },
+                {
+                    "name": "chuckle",
+                    "probability": 0.25
                 }
             ]
         },
@@ -189,7 +209,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 1
+                    "probability": 0.75
+                },
+                {
+                    "name": "shock",
+                    "probability": 0.25
                 }
             ]
         },
@@ -243,7 +267,7 @@
         {
             "state_name": "listening",
             "dims": [0, 0, 256, 256],
-            "file_name": "neco_amaze.gif",
+            "file_name": "neco_thinking.gif",
             "transitions_to": [
                 {
                     "name": "listening",
@@ -270,7 +294,11 @@
             "transitions_to": [
                 {
                     "name": "talking",
-                    "probability": 1
+                    "probability": 0.95
+                },
+                {
+                    "name": "shrug",
+                    "probability": 0.05
                 }
             ]
         }
