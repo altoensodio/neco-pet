@@ -2,6 +2,7 @@ from util import WeightedRandomMap, openai_query, speak
 from tkinter import simpledialog
 import tkinter as tk
 from os.path import join
+import sys
 
 def read_frames(impath):
         output = []
@@ -56,4 +57,7 @@ class Pet:
         query = simpledialog.askstring("ChatGPT Input", "What do you want to ask?", parent=self.window)
         response = openai_query(prompt % query)
         self.set_state(response_state)
+        with open('doc/output.txt', 'a') as f:
+            sys.stdout = f
+            print(response)
         speak(response, lambda: self.set_state(end_state))

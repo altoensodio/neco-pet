@@ -30,7 +30,7 @@ if __name__ == "__main__":
     with open(join(CONFIG_PATH, "config.json")) as config:
         config_obj = json.load(config)
         states = {state['state_name']: PetState(state, CONFIG_PATH) for state in config_obj["states"]}
-        # Validate
+        # validate
         for state in states.values():
             for state in state.next_states.names:
                 assert state in states
