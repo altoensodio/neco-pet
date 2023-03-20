@@ -3,7 +3,7 @@
         {
             "trigger": "click",
             "type": "chatgpt",
-            "prompt": "Let's chat. You are a snarky japanese cat-like entity named Neco-Arc who ends most of her sentences with the word 'nyaa' (when it makes sense). You are a very high-tension character. You love explosions, beams, and anything else destructive and powerful; however, you do not condone violence. You have a good heart and you have many friends at your workplace, cafe Ahnenerbe.\nMe: %s\nYou:",
+            "prompt": "Let's chat. You are a snarky japanese cat-like entity named Neco-Arc who ends most of her sentences with the word 'nyaa' (when it makes sense). You are a very high-tension character. You love explosions, beams, and anything else destructive and powerful. You have a good heart and you have many friends at your workplace, cafe Ahnenerbe.\nMe: %s\nYou:",
             "listen_state": "begin_listening",
             "response_state": "begin_talking",
             "end_state": "idle"
@@ -12,7 +12,7 @@
     "states": [
         {
             "state_name": "cool",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_cool.gif",
             "transitions_to": [
                 {
@@ -24,7 +24,7 @@
     
         {
             "state_name": "idle",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_idle.gif",
             "transitions_to": [
                 {
@@ -84,7 +84,7 @@
     
         {
             "state_name": "dance",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_dance.gif",
             "transitions_to": [
                 {
@@ -95,7 +95,7 @@
         },
         {
             "state_name": "wave",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_wave.gif",
             "transitions_to": [
                 {
@@ -110,7 +110,7 @@
         },
         {
             "state_name": "sleep",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_sleep.gif",
             "transitions_to": [
                 {
@@ -121,7 +121,7 @@
         },
         {
             "state_name": "excite",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_excite.gif",
             "transitions_to": [
                 {
@@ -136,7 +136,7 @@
         },
         {
             "state_name": "angry",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_angry.gif",
             "transitions_to": [
                 {
@@ -152,7 +152,7 @@
     
         {
             "state_name": "celebrate",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_celebrate.gif",
             "transitions_to": [
                 {
@@ -163,7 +163,7 @@
         },
         {
             "state_name": "beam",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_beam.gif",
             "transitions_to": [
                 {
@@ -178,7 +178,7 @@
         },
         {
             "state_name": "chuckle",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_chuckle.gif",
             "transitions_to": [
                 {
@@ -193,7 +193,7 @@
         },
         {
             "state_name": "shrug",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_shrug.gif",
             "transitions_to": [
                 {
@@ -204,7 +204,7 @@
         },
         {
             "state_name": "shock",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_shock.gif",
             "transitions_to": [
                 {
@@ -219,7 +219,7 @@
         },
         {
             "state_name": "sad",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_sad.gif",
             "transitions_to": [
                 {
@@ -230,7 +230,7 @@
         },
         {
             "state_name": "walk",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_walk.gif",
             "transitions_to": [
                 {
@@ -241,7 +241,7 @@
         },
         {
             "state_name": "run",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_run.gif",
             "transitions_to": [
                 {
@@ -253,7 +253,7 @@
 
         {
             "state_name": "begin_listening",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_listen.gif",
             "transitions_to": [
                 {
@@ -264,7 +264,7 @@
         },
         {
             "state_name": "listening",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_thinking.gif",
             "transitions_to": [
                 {
@@ -276,7 +276,7 @@
 
         {
             "state_name": "begin_talking",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_yare.gif",
             "transitions_to": [
                 {
@@ -287,7 +287,7 @@
         },
         {
             "state_name": "talking",
-            "dims": [-25, -25, 256, 256],
+            "dims": [0, 0, 256, 256],
             "file_name": "neco_gendo.gif",
             "transitions_to": [
                 {

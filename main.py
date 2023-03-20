@@ -19,8 +19,11 @@ def create_event_func(event, pet):
 def update():
     frame = pet.next_frame()
     label.configure(image=frame)
+    current_x = window.winfo_x()
+    current_y = window.winfo_y()
+
     window.geometry(
-        f'{pet.current_state.w}x{pet.current_state.h}+{pet.x + pet.current_state.ox}+{pet.y + pet.current_state.oy}')
+        f'{pet.current_state.w}x{pet.current_state.h}+{current_x}+{current_y}')
     window.after(100, update)
 
 
@@ -30,7 +33,7 @@ if __name__ == "__main__":
     with open(join(CONFIG_PATH, "config.json")) as config:
         config_obj = json.load(config)
         states = {state['state_name']: PetState(state, CONFIG_PATH) for state in config_obj["states"]}
-        # validate
+        
         for state in states.values():
             for state in state.next_states.names:
                 assert state in states
@@ -40,14 +43,39 @@ if __name__ == "__main__":
         for event in config_obj["events"]:
             event_func = create_event_func(event, pet)
             if event["trigger"] == "click":
-                window.bind("<Button-1>", event_func)
+                window.bind("<Double-Button-1>", event_func)
 
-    # window configuration
     window.config(highlightbackground='black')
     label = tk.Label(window, bd=0, bg='black')
     window.overrideredirect(True)
     window.wm_attributes('-transparentcolor', 'black')
     label.pack()
 
-    window.after(1, update)
-    window.mainloop()
+start_drag_x = 0
+start_drag_y = 0
+dragging = False
+
+def on_start_drag(event):
+    global start_drag_x, start_drag_y, dragging
+    if event.state & 0x0004:
+        start_drag_x = event.x
+        start_drag_y = event.y
+        dragging = True
+
+def on_drag(event):
+    global start_drag_x, start_drag_y, dragging
+    if dragging:
+        x = window.winfo_x() - start_drag_x + event.x
+        y = window.winfo_y() - start_drag_y + event.y
+        window.geometry(f"+{x}+{y}")
+
+def on_stop_drag(event):
+    global dragging
+    dragging = False
+
+window.bind('<ButtonPress-1>', on_start_drag)
+window.bind('<B1-Motion>', on_drag)
+window.bind('<ButtonRelease-1>', on_stop_drag)
+
+window.after(1, update)
+window.mainloop()
