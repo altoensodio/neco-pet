@@ -292,11 +292,11 @@
             "transitions_to": [
                 {
                     "name": "talking",
-                    "probability": 0.95
+                    "probability": 0.99
                 },
                 {
                     "name": "shrug",
-                    "probability": 0.05
+                    "probability": 0.01
                 }
             ]
         }
