@@ -15,15 +15,17 @@ def create_event_func(event, pet):
     elif event["type"] == "chatgpt":
         return lambda e: pet.start_chat(event["prompt"], event["listen_state"], event["response_state"], event["end_state"])
 
+# initial neco-location
+current_x = 15
+current_y = 775
 
 def update():
     frame = pet.next_frame()
     label.configure(image=frame)
-    current_x = window.winfo_x()
-    current_y = window.winfo_y()
 
-    window.geometry(
-        f'{pet.current_state.w}x{pet.current_state.h}+{current_x}+{current_y}')
+    # pause updating coordinates while dragging
+    if dragging == False:
+        window.geometry(f'{pet.current_state.w}x{pet.current_state.h}+{current_x}+{current_y}')
     window.after(100, update)
 
 
@@ -45,12 +47,14 @@ if __name__ == "__main__":
             if event["trigger"] == "click":
                 window.bind("<Double-Button-1>", event_func)
 
+    # neco-configuration
     window.config(highlightbackground='black')
     label = tk.Label(window, bd=0, bg='black')
     window.overrideredirect(True)
     window.wm_attributes('-transparentcolor', 'black')
     label.pack()
 
+# drag (thx to https://github.com/ausboss/desktop-pet for code)
 start_drag_x = 0
 start_drag_y = 0
 dragging = False
@@ -70,12 +74,14 @@ def on_drag(event):
         window.geometry(f"+{x}+{y}")
 
 def on_stop_drag(event):
-    global dragging
+    global dragging, current_x, current_y
     dragging = False
+    current_x = window.winfo_x()
+    current_y = window.winfo_y()
 
 window.bind('<ButtonPress-1>', on_start_drag)
 window.bind('<B1-Motion>', on_drag)
 window.bind('<ButtonRelease-1>', on_stop_drag)
 
-window.after(1, update)
+window.after(100, update)
 window.mainloop()
