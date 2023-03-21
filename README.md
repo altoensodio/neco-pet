@@ -29,6 +29,6 @@ or
 
 # GPT setup
 1. Sign up on OpenAI and get your API key
-2. Set OPENAI_API_KEY environment variable: ```setx OPENAI_API_KEY "<yourkey>" ```
+2. Set OPENAI_API_KEY environment variable: ```$ setx OPENAI_API_KEY "<yourkey>"```
 
 If you like the idea and would like to contribute feel free to have a look at the Issues tab.
