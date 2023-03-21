@@ -28,6 +28,14 @@ def update():
         window.geometry(f'{pet.current_state.w}x{pet.current_state.h}+{current_x}+{current_y}')
     window.after(100, update)
 
+def close_window(event):
+    menu = tk.Menu(window, tearoff=0)
+    menu.add_command(label="Close", command=window.destroy)
+    # display the menu at the location of the right-click event
+    try:
+        menu.tk_popup(event.x_root, event.y_root, 0)
+    finally:
+        menu.grab_release()
 
 if __name__ == "__main__":
     window = tk.Tk()
@@ -82,6 +90,7 @@ def on_stop_drag(event):
 window.bind('<ButtonPress-1>', on_start_drag)
 window.bind('<B1-Motion>', on_drag)
 window.bind('<ButtonRelease-1>', on_stop_drag)
+window.bind('<Button-3>', close_window)
 
 window.after(100, update)
 window.mainloop()
