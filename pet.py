@@ -59,7 +59,7 @@ class Pet:
         query = simpledialog.askstring("ChatGPT Input", "What do you want to ask?", parent=self.window)
         response = openai_query(prompt % query)
         self.set_state(response_state)
-        with open('doc/output.txt', 'a', encoding="utf-8") as f:
+        with open('output.txt', 'a', encoding="utf-8") as f:
             sys.stdout = f
             print(query)
             print(response)
