@@ -7,7 +7,7 @@ https://user-images.githubusercontent.com/18296611/226147386-fc323e9d-e67e-4631-
 Neco-Arc themed desktop pet/mascot/waifu with support for ChatGPT based on https://github.com/hackdaddy8000/desktop-pet
 
 # Usage
-Ctrl-click to drag, double-click to open ChatGPT session.
+Ctrl-click to drag, middle-click to make noises, double-click to open ChatGPT session.
 <br>
 You can customize her personality by editing the prompt in ```assets\neco_arc\config.json```
 <br>

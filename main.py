@@ -3,6 +3,7 @@ import sys
 import tkinter as tk
 from os.path import join
 from pet import Pet, PetState
+from pygame import mixer
 
 if len(sys.argv) >= 2:
     CONFIG_PATH = sys.argv[1]
@@ -94,9 +95,32 @@ def on_stop_drag(event):
     current_y = window.winfo_y()
 
 
+# pygame mixer for sound
+mixer.init()
+
+bukkorosu = mixer.Sound("sound/bukkorosu.mp3")
+buru_nyuu = mixer.Sound("sound/buru_nyuu.mp3")
+hayai_na = mixer.Sound("sound/hayai_na.mp3")
+ima_doko = mixer.Sound("sound/ima_doko.mp3")
+ima_hima = mixer.Sound("sound/ima_hima.mp3")
+muda_muda = mixer.Sound("sound/muda_muda.mp3")
+ngya = mixer.Sound("sound/ngya.mp3")
+onn = mixer.Sound("sound/onn.mp3")
+shinbun = mixer.Sound("sound/shinbun.mp3")
+shinu_ka = mixer.Sound("sound/shinu_ka.mp3")
+shya = mixer.Sound("sound/shya.mp3")
+unn = mixer.Sound("sound/unn.mp3")
+yanya_jyan = mixer.Sound("sound/yanya_jyan.mp3")
+
+
+def middle_click(event):
+    mixer.Sound.play(ima_doko)
+
+
 window.bind('<ButtonPress-1>', on_start_drag)
 window.bind('<B1-Motion>', on_drag)
 window.bind('<ButtonRelease-1>', on_stop_drag)
+window.bind('<Button-2>', middle_click)
 window.bind('<Button-3>', close_window)
 
 window.after(100, update)
