@@ -1,13 +1,14 @@
-import tkinter as tk
 import json
-from pet import Pet, PetState
-from os.path import join
 import sys
+import tkinter as tk
+from os.path import join
+from pet import Pet, PetState
 
 if len(sys.argv) >= 2:
     CONFIG_PATH = sys.argv[1]
 else:
     CONFIG_PATH = "assets\\neco_arc\\"
+
 
 def create_event_func(event, pet):
     if event["type"] == "state_change":
@@ -15,18 +16,20 @@ def create_event_func(event, pet):
     elif event["type"] == "chatgpt":
         return lambda e: pet.start_chat(event["prompt"], event["listen_state"], event["response_state"], event["end_state"])
 
+
 # initial neco-location
 current_x = 15
 current_y = 775
 
+
 def update():
     frame = pet.next_frame()
     label.configure(image=frame)
-
     # pause updating coordinates while dragging
-    if dragging == False:
+    if not dragging:
         window.geometry(f'{pet.current_state.w}x{pet.current_state.h}+{current_x}+{current_y}')
     window.after(100, update)
+
 
 def close_window(event):
     menu = tk.Menu(window, tearoff=0)
@@ -37,13 +40,13 @@ def close_window(event):
     finally:
         menu.grab_release()
 
+
 if __name__ == "__main__":
     window = tk.Tk()
 
     with open(join(CONFIG_PATH, "config.json")) as config:
         config_obj = json.load(config)
         states = {state['state_name']: PetState(state, CONFIG_PATH) for state in config_obj["states"]}
-        
         for state in states.values():
             for state in state.next_states.names:
                 assert state in states
@@ -67,12 +70,14 @@ start_drag_x = 0
 start_drag_y = 0
 dragging = False
 
+
 def on_start_drag(event):
     global start_drag_x, start_drag_y, dragging
     if event.state & 0x0004:
         start_drag_x = event.x
         start_drag_y = event.y
         dragging = True
+
 
 def on_drag(event):
     global start_drag_x, start_drag_y, dragging
@@ -81,11 +86,13 @@ def on_drag(event):
         y = window.winfo_y() - start_drag_y + event.y
         window.geometry(f"+{x}+{y}")
 
+
 def on_stop_drag(event):
     global dragging, current_x, current_y
     dragging = False
     current_x = window.winfo_x()
     current_y = window.winfo_y()
+
 
 window.bind('<ButtonPress-1>', on_start_drag)
 window.bind('<B1-Motion>', on_drag)

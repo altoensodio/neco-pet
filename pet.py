@@ -1,20 +1,22 @@
-from util import WeightedRandomMap, openai_query, speak
-from tkinter import simpledialog
+import sys
 import tkinter as tk
 from os.path import join
-import sys
+from tkinter import simpledialog
+from util import WeightedRandomMap, openai_query, speak
+
 
 def read_frames(impath):
-        output = []
-        i = 0
-        while True:
-            try:
-                new_frame = tk.PhotoImage(file=join(impath),format=f'gif -index {i}')
-                output.append(new_frame)
-            except:
-                break
-            i += 1
-        return output
+    output = []
+    i = 0
+    while True:
+        try:
+            new_frame = tk.PhotoImage(file=join(impath), format=f'gif -index {i}')
+            output.append(new_frame)
+        except:
+            break
+        i += 1
+    return output
+
 
 class PetState:
     def __init__(self, json_obj, impath):
@@ -51,7 +53,7 @@ class Pet:
     def set_state(self, name: str):
         self.current_state = self.states[name]
         self.__current_frame = 0
-    
+
     def start_chat(self, prompt: str, listen_state: str, response_state: str, end_state: str):
         self.set_state(listen_state)
         query = simpledialog.askstring("ChatGPT Input", "What do you want to ask?", parent=self.window)
