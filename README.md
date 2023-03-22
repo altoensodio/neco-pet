@@ -4,7 +4,7 @@
 https://user-images.githubusercontent.com/18296611/226147386-fc323e9d-e67e-4631-b590-995c9a14fb4c.mp4
 
 <br>
-Neco-Arc themed desktop pet/mascot/waifu with support for ChatGPT based on https://github.com/hackdaddy8000/desktop-pet
+Neco-Arc themed desktop pet/mascot/waifu with support for ChatGPT based on https://github.com/hackdaddy8000/desktop-pet. Should work with Mac and Windows, haven't tested on Linux.
 
 # Usage
 Ctrl-click to drag, left-click to make noises, right-click to open menu, double-click to open ChatGPT session.
