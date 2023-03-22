@@ -7,11 +7,11 @@ https://user-images.githubusercontent.com/18296611/226147386-fc323e9d-e67e-4631-
 Neco-Arc themed desktop pet/mascot/waifu with support for ChatGPT based on https://github.com/hackdaddy8000/desktop-pet
 
 # Usage
-Ctrl-click to drag, middle-click to make noises, double-click to open ChatGPT session.
+Ctrl-click to drag, left-click to make noises, right-click to open menu, double-click to open ChatGPT session.
 <br>
 You can customize her personality by editing the prompt in ```assets\neco_arc\config.json```
 <br>
-Her responses will be saved to ```doc\output.txt```
+Her responses will be saved to ```output.txt```
 
 She will use your default TTS voice for now. I would like to create a custom voice for her eventually.
 

@@ -1,5 +1,6 @@
 import json
 import os
+import platform
 import random
 import subprocess
 import sys
@@ -22,8 +23,8 @@ def create_event_func(event, pet):
 
 
 # initial neco-location
-current_x = 15
-current_y = 775
+current_x = 0
+current_y = 0
 
 
 def update():
@@ -37,9 +38,8 @@ def update():
 
 def close_window(event):
     menu = tk.Menu(window, tearoff=0)
-    menu.add_command(label="Open output.txt", command=open_file)
-    menu.add_command(label="Close", command=window.destroy)
-    # display the menu at the location of the right-click event
+    menu.add_command(label="output.txt", command=open_file)
+    menu.add_command(label="close", command=window.destroy)
     try:
         menu.tk_popup(event.x_root, event.y_root, 0)
     finally:
@@ -47,8 +47,13 @@ def close_window(event):
 
 
 def open_file():
-    filename = "doc/output.txt"
-    subprocess.Popen(["notepad.exe", filename])
+    filename = "output.txt"
+    if platform.system() == "Windows":
+        subprocess.Popen(["notepad.exe", filename])
+    elif platform.system() == "Darwin":
+        subprocess.Popen(["open", filename])
+    elif platform.system() == "Linux":
+        subprocess.Popen(["xdg-open", filename])
 
 
 if __name__ == "__main__":
@@ -69,10 +74,19 @@ if __name__ == "__main__":
                 window.bind("<Double-Button-1>", event_func)
 
     # neco-configuration
-    window.config(highlightbackground='black')
-    label = tk.Label(window, bd=0, bg='black')
-    window.overrideredirect(True)
-    window.wm_attributes('-transparentcolor', 'black')
+    if platform.system() == "Windows":
+        # windows
+        window.config(highlightbackground='black')
+        label = tk.Label(window, bd=0, bg='black')
+        window.overrideredirect(True)
+        window.wm_attributes('-transparentcolor', 'black')
+    else:
+        # mac
+        window.config(highlightbackground='black')
+        label = tk.Label(window, bd=0, bg='black')
+        window.overrideredirect(True)
+        window.wm_attributes('-transparent', 'false')
+
     label.pack()
 
 # drag (thx to https://github.com/ausboss/desktop-pet for code)
@@ -87,6 +101,11 @@ def on_start_drag(event):
         start_drag_x = event.x
         start_drag_y = event.y
         dragging = True
+    else:
+        # play random sound on click without ctrl-key
+        random_sound = random.choice([bukkorosu, buru_nyuu, hayai_na, ima_doko, ima_hima,
+                                      muda_muda, ngya, shinbun, shinu_ka, shya, unn, yanya_jyan])
+        mixer.Sound.play(random_sound)
 
 
 def on_drag(event):
@@ -126,17 +145,14 @@ for sound in [bukkorosu, buru_nyuu, hayai_na, ima_hima,
     sound.set_volume(ima_doko.get_volume())
 
 
-def middle_click(event):
-    random_sound = random.choice([bukkorosu, buru_nyuu, hayai_na, ima_doko, ima_hima,
-                                  muda_muda, ngya, shinbun, shinu_ka, shya, unn, yanya_jyan])
-    mixer.Sound.play(random_sound)
-
-
 window.bind('<ButtonPress-1>', on_start_drag)
 window.bind('<B1-Motion>', on_drag)
 window.bind('<ButtonRelease-1>', on_stop_drag)
-window.bind('<Button-2>', middle_click)
-window.bind('<Button-3>', close_window)
+if platform.system() == "Darwin":
+    window.bind('<Button-2>', close_window)
+else:
+    window.bind('<Button-3>', close_window)
+
 
 window.after(100, update)
 window.mainloop()
