@@ -1,4 +1,5 @@
 import json
+import os
 import random
 import subprocess
 import sys
@@ -10,7 +11,7 @@ from pygame import mixer
 if len(sys.argv) >= 2:
     CONFIG_PATH = sys.argv[1]
 else:
-    CONFIG_PATH = "assets\\neco_arc\\"
+    CONFIG_PATH = os.path.join("assets", "neco_arc")
 
 
 def create_event_func(event, pet):
