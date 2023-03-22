@@ -8,7 +8,7 @@ Neco-Arc themed desktop pet/mascot/waifu with support for ChatGPT based on https
 
 # Usage
 Ctrl-click to drag, left-click to make noises, right-click to open menu, double-click to open ChatGPT session.
-<br>
+
 You can customize her personality by editing the prompt in ```assets\neco_arc\config.json```
 <br>
 Her responses will be saved to ```output.txt```
@@ -23,9 +23,8 @@ or
 
 1. ```$ git clone https://github.com/KN1053/neco-arc-GPT.git```
 2. cd to neco-arc-GPT directory
-3. Install python, then install requirements:
-```$ pip install -r requirements.txt```
-4. ```$ py main.py```
+3. Install python, then install requirements: ```$ pip install -r requirements.txt```
+4. ```$ py main.py``` or ```$ python3 main.py```
 
 # GPT setup
 1. Sign up on OpenAI and get your API key

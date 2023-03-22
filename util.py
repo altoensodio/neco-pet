@@ -46,7 +46,7 @@ def openai_query(message):
 
 def speak(message, callback):
     engine = pyttsx3.init()
-    engine.setProperty("pitch", 300)
+    engine.setProperty("rate", 175)
     engine.say(message)
 
     def f():
