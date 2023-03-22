@@ -1,5 +1,7 @@
 import json
+import os
 import random
+import subprocess
 import sys
 import tkinter as tk
 from os.path import join
@@ -35,12 +37,18 @@ def update():
 
 def close_window(event):
     menu = tk.Menu(window, tearoff=0)
+    menu.add_command(label="Open output.txt", command=open_file)
     menu.add_command(label="Close", command=window.destroy)
     # display the menu at the location of the right-click event
     try:
         menu.tk_popup(event.x_root, event.y_root, 0)
     finally:
         menu.grab_release()
+
+
+def open_file():
+    filename = "doc/output.txt"
+    subprocess.Popen(["notepad.exe", filename])
 
 
 if __name__ == "__main__":
