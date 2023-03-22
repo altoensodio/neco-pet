@@ -1,4 +1,5 @@
 import json
+import random
 import sys
 import tkinter as tk
 from os.path import join
@@ -95,7 +96,7 @@ def on_stop_drag(event):
     current_y = window.winfo_y()
 
 
-# pygame mixer for sound
+# pygame mixer
 mixer.init()
 
 bukkorosu = mixer.Sound("sound/bukkorosu.mp3")
@@ -105,16 +106,22 @@ ima_doko = mixer.Sound("sound/ima_doko.mp3")
 ima_hima = mixer.Sound("sound/ima_hima.mp3")
 muda_muda = mixer.Sound("sound/muda_muda.mp3")
 ngya = mixer.Sound("sound/ngya.mp3")
-onn = mixer.Sound("sound/onn.mp3")
 shinbun = mixer.Sound("sound/shinbun.mp3")
 shinu_ka = mixer.Sound("sound/shinu_ka.mp3")
 shya = mixer.Sound("sound/shya.mp3")
 unn = mixer.Sound("sound/unn.mp3")
 yanya_jyan = mixer.Sound("sound/yanya_jyan.mp3")
 
+ima_doko.set_volume(0.25)
+for sound in [bukkorosu, buru_nyuu, hayai_na, ima_hima,
+              muda_muda, ngya, shinbun, shinu_ka, shya, unn, yanya_jyan]:
+    sound.set_volume(ima_doko.get_volume())
+
 
 def middle_click(event):
-    mixer.Sound.play(ima_doko)
+    random_sound = random.choice([bukkorosu, buru_nyuu, hayai_na, ima_doko, ima_hima,
+                                  muda_muda, ngya, shinbun, shinu_ka, shya, unn, yanya_jyan])
+    mixer.Sound.play(random_sound)
 
 
 window.bind('<ButtonPress-1>', on_start_drag)

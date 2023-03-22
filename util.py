@@ -40,7 +40,7 @@ def openai_query(message):
     try:
         response = openai.Completion.create(model="text-davinci-003", prompt=message, temperature=.95, max_tokens=1000)
         return response["choices"][0]["text"]
-    except:
+    except Exception:
         return
 
 
