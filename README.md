@@ -24,7 +24,7 @@ or
 1. ```$ git clone https://github.com/KN1053/neco-arc-GPT.git```
 2. cd to neco-arc-GPT directory
 3. Install python, then install requirements: ```$ pip install -r requirements.txt```
-4. ```$ py main.py``` or ```$ python3 main.py```
+4. ```$ py main.py```
 
 # GPT setup
 1. Sign up on OpenAI and get your API key
