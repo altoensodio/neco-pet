@@ -41,7 +41,7 @@ def openai_query(message):
         response = openai.Completion.create(model="text-davinci-003", prompt=message, temperature=.95, max_tokens=2500)
         return response["choices"][0]["text"]
     except Exception:
-        message = "Nyaa! I'm Neco-Arc, an advanced programmable AI from the café Ahnenerbe. Unfortunately, it looks like ChatGPT is not reachable at the moment. You may need to set your API key to an environment variable in order for it to work nyaa."
+        message = "Hi there, it's Neco-Arc nyaa! Open AI is not reachable at the moment nyaa. You may need to set your API key as an environment variable for it to work nyaa."
         return message
 
 
