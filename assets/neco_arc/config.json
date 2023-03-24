@@ -29,55 +29,55 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 0.25
+                    "probability": 0.40
                 },
                 {
                     "name": "dance",
-                    "probability": 0.01
+                    "probability": 0.05
                 },
                 {
                     "name": "wave",
-                    "probability": 0.01
+                    "probability": 0.05
                 },
                 {
                     "name": "sleep",
-                    "probability": 0.01
+                    "probability": 0.05
                 },
                 {
                     "name": "excite",
-                    "probability": 0.01
+                    "probability": 0.05
                 },
                 {
                     "name": "angry",
-                    "probability": 0.01
+                    "probability": 0.05
                 },
                 {
                     "name": "celebrate",
-                    "probability": 0.01
+                    "probability": 0.05
                 },
                 {
                     "name": "chuckle",
-                    "probability": 0.01
+                    "probability": 0.05
                 },
                 {
                     "name": "shrug",
-                    "probability": 0.01
+                    "probability": 0.05
                 },
                 {
                     "name": "shock",
-                    "probability": 0.01
+                    "probability": 0.05
                 },
                 {
                     "name": "sad",
-                    "probability": 0.01
+                    "probability": 0.05
                 },
                 {
                     "name": "walk",
-                    "probability": 0.01
+                    "probability": 0.05
                 },
                 {
                     "name": "run",
-                    "probability": 0.01
+                    "probability": 0.05
                 }
             ]
         },
@@ -100,11 +100,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 0.75
+                    "probability": 0.6
                 },
                 {
                     "name": "wave",
-                    "probability": 0.25
+                    "probability": 0.4
                 }
             ]
         },
@@ -126,11 +126,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 0.75
+                    "probability": 0.6
                 },
                 {
                     "name": "excite",
-                    "probability": 0.25
+                    "probability": 0.4
                 }
             ]
         },
@@ -141,11 +141,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 0.75
+                    "probability": 0.6
                 },
                 {
                     "name": "angry",
-                    "probability": 0.25
+                    "probability": 0.4
                 }
             ]
         },
@@ -168,11 +168,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 0.75
+                    "probability": 0.6
                 },
                 {
                     "name": "beam",
-                    "probability": 0.25
+                    "probability": 0.4
                 }
             ]
         },
@@ -183,11 +183,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 0.75
+                    "probability": 0.6
                 },
                 {
                     "name": "chuckle",
-                    "probability": 0.25
+                    "probability": 0.4
                 }
             ]
         },
@@ -209,11 +209,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 0.75
+                    "probability": 0.6
                 },
                 {
                     "name": "shock",
-                    "probability": 0.25
+                    "probability": 0.4
                 }
             ]
         },
@@ -224,7 +224,11 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 1
+                    "probability": 0.6
+                },
+                {
+                    "name": "sad",
+                    "probability": 0.4
                 }
             ]
         },
