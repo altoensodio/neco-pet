@@ -41,7 +41,7 @@ def openai_query(message):
         response = openai.Completion.create(model="text-davinci-003", prompt=message, temperature=.95, max_tokens=2500)
         return response["choices"][0]["text"]
     except Exception:
-        message = "Hi there, it's Neco-Arc nyaa! Open AI is not reachable at the moment nyaa. You may need to set your API key as an environment variable for it to work nyaa."
+        message = "Open AI is not reachable nyaa! You might need to store your API key as an environment variable nyaa."
         return message
 
 
