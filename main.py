@@ -14,7 +14,7 @@ if len(sys.argv) >= 2:
 else:
     CONFIG_PATH = os.path.join("assets", "neco_arc")
 
-# initial neco-location
+# initial location
 current_x = 0
 current_y = 0
 
@@ -66,7 +66,7 @@ def on_start_drag(event):
         start_drag_y = event.y
         dragging = True
     else:
-        # play random sound on click without ctrl-key
+        # play random sound on click without drag
         random_sound = random.choice([bukkorosu, buru_nyuu, hayai_na, ima_doko, ima_hima,
                                       muda_muda, ngya, shinbun, shinu_ka, shya, unn, yanya_jyan])
         mixer.Sound.play(random_sound)
@@ -103,6 +103,7 @@ if __name__ == "__main__":
             event_func = create_event_func(event, pet)
             if event["trigger"] == "click":
                 window.bind("<Double-Button-1>", event_func)
+
 
     # neco-configuration
     if platform.system() == "Windows":

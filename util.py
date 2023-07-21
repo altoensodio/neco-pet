@@ -1,8 +1,11 @@
 import openai
 import os
+import platform
 import pyttsx3
+import subprocess
 import random
 import threading
+from gtts import gTTS
 from dotenv import load_dotenv
 
 
@@ -46,11 +49,25 @@ def openai_query(message):
 
 
 def speak(message, callback):
-    engine = pyttsx3.init()
-    engine.setProperty("rate", 175)
-    engine.say(message)
+    if platform.system() == "Darwin":
+        tts = gTTS(text=message)
+        output_filename = "output.mp3"
+        tts.save(output_filename)
 
-    def f():
-        engine.runAndWait()
-        callback()
-    threading.Thread(target=f).start()
+        def f():
+            subprocess.run(["afplay", "-r", "1", output_filename])
+            os.remove(output_filename)
+            callback()
+
+        threading.Thread(target=f).start()
+
+    else:
+        engine = pyttsx3.init()
+        engine.setProperty("rate", 175)
+        engine.say(message)
+
+        def f():
+            engine.runAndWait()
+            callback()
+
+        threading.Thread(target=f).start()
