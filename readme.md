@@ -31,6 +31,6 @@ or
 1. Sign up on OpenAI and get your API key
 2. Make sure you have free trial credit or a payment method set up.
 3. Set OPENAI_API_KEY environment variable in Windows: ```$ setx OPENAI_API_KEY "<yourkey>"```
-4. If using mac or linux (add to shell config file to make it permanent) ```$ export OPENAI_API_KEY=<yourkey>```
+4. If using mac or linux (add to shell config file to make it permanent): ```export OPENAI_API_KEY=<yourkey>```
 
 If you like the idea and would like to contribute feel free to have a look at the Issues tab.
