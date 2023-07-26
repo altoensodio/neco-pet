@@ -1,7 +1,7 @@
 import openai
 import os
 import platform
-import pyttsx3
+import pyttsx4
 import subprocess
 import random
 import threading
@@ -62,7 +62,7 @@ def speak(message, callback):
         threading.Thread(target=f).start()
 
     else:
-        engine = pyttsx3.init()
+        engine = pyttsx4.init()
         engine.setProperty("rate", 175)
         engine.say(message)
 
