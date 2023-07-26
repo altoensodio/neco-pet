@@ -111,10 +111,12 @@ if __name__ == "__main__":
         label = tk.Label(window, bd=0, bg='black')
         window.overrideredirect(True)
         window.wm_attributes('-transparentcolor', 'black')
-    else:
-        window.config(highlightbackground='black')
-        label = tk.Label(window, bd=0, bg='black')
+    elif platform.system() == "Darwin":
+        label = tk.Label(window, bd=0, bg='white')
         window.overrideredirect(True)
+    elif platform.system() == "Linux":
+        label = tk.Label(window, bd=0, bg='white')
+        window.wm_attributes('-type', 'splash')
 
     label.pack()
 
