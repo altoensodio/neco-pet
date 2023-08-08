@@ -24,13 +24,11 @@ or
 1. ```$ git clone https://github.com/KN1053/neco-arc-GPT.git```
 2. cd to neco-arc-GPT directory
 3. Install python, then install requirements: ```$ pip install -r requirements.txt```
-4. You might also need to install tkinter if using linux: ```$ sudo apt-get install python3-tk```
-5. ```$ python3 main.py```
+4. ```$ py main.py```
 
 # GPT setup
 1. Sign up on OpenAI and get your API key
-2. Make sure you have free trial credit or a payment method set up.
-3. Set OPENAI_API_KEY environment variable in Windows: ```$ setx OPENAI_API_KEY "<yourkey>"```
-4. If using mac or linux (add to shell config file to make it permanent): ```export OPENAI_API_KEY=<yourkey>```
+2. Make sure you have free trial credit or a payment method set up
+3. Set OPENAI_API_KEY environment variable: ```$ setx OPENAI_API_KEY "<yourkey>"```
 
 If you like the idea and would like to contribute feel free to have a look at the Issues tab.
