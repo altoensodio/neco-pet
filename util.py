@@ -1,6 +1,7 @@
 import openai
 import os
 import platform
+import pyttsx3
 import pyttsx4
 import subprocess
 import random
@@ -49,7 +50,18 @@ def openai_query(message):
 
 
 def speak(message, callback):
-    if platform.system() == "Darwin":
+    if platform.system() == "Windows":
+        engine = pyttsx3.init()
+        engine.setProperty("rate", 175)
+        engine.say(message)
+
+        def f():
+            engine.runAndWait()
+            callback()
+
+        threading.Thread(target=f).start()
+
+    elif platform.system() == "Darwin":
         tts = gTTS(text=message)
         output_filename = "output.mp3"
         tts.save(output_filename)
@@ -61,7 +73,7 @@ def speak(message, callback):
 
         threading.Thread(target=f).start()
 
-    else:
+    elif platform.system() == "Linux":
         engine = pyttsx4.init()
         engine.setProperty("rate", 175)
         engine.say(message)
