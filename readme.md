@@ -13,7 +13,7 @@ You can customize her personality by editing the prompt in ```assets\neco_arc\co
 <br>
 Her responses will be saved to ```output.txt```
 
-She will use your system's TTS voice by default. If you want to use a custom voice, you can replace the original util.py with the .alt file and follow the playHT setup instructions in the comments.
+She will use your system's TTS voice by default. If you want to use a custom voice, you can replace the original util.py with the alternative file in the doc folder and follow the playHT setup instructions in the comments.
 
 # Setup
 1. Download and unzip

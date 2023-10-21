@@ -10,12 +10,12 @@ from io import BytesIO
 from dotenv import load_dotenv
 
 # This is an alternative util.py file that can be used to integrate neco-arc-GPT with playHT to make her
-# respond in a custom voice. To use, rename the original util.py to util.py.old, then rename this to util.py.
+# respond in a custom voice. To use it, backup and replace the original util.py file with this one.
 # The free plan gives you 12,500 characters and one instant voice clone.
 
 # For this to work, you'll need to create an account on playHT and create a
 # custom voice using voice cloning. Then you'll need to get your user ID and secret key and paste them into the
-# AUTHORIZATION and X-USER-ID fields below. Finally, you'll need to get the ID of your custom voice
+# AUTHORIZATION and X-USER-ID fields below. Lastly, you'll need to get the ID of your custom voice
 # (for example s3://voice-cloning-zero-shot/c657eba0-82.../neco-arc/manifest.json) and paste it into the 'voice'
 # field. The easiest way I've found to get this ID is through the API documentation page here:
 # https://docs.play.ht/reference/api-list-cloned-voices
