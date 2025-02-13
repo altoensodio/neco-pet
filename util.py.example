@@ -53,11 +53,20 @@ class WeightedRandomMap:
 def openai_query(message):
     load_dotenv()
     openai.api_key = os.getenv("OPENAI_API_KEY")
+    
+    messages = [{"role": "user", "content": message}]
+
     try:
-        response = openai.Completion.create(model="text-davinci-003", prompt=message, temperature=.95, max_tokens=2500)
-        return response["choices"][0]["text"]
-    except Exception:
-        message = "Open AI is not reachable nyaa! You might need to store your API key as an environment variable nyaa."
+        response = openai.chat.completions.create(
+            model="gpt-4o-mini", 
+            messages=messages, 
+            temperature=0.75, 
+            max_tokens=2500
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        #print(f"Error: {e}")
+        message=""
         return message
 
 
