@@ -1,4 +1,4 @@
-# neko-arc-GPT
+# neco-arc-GPT
 ![example](https://user-images.githubusercontent.com/18296611/226432416-eee1fe2b-94c1-4094-a3ba-173506b5b55d.gif)
 
 https://user-images.githubusercontent.com/18296611/226147386-fc323e9d-e67e-4631-b590-995c9a14fb4c.mp4
