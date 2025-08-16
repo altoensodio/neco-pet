@@ -1,11 +1,10 @@
 {
     "events": [
         {
-            "trigger": "click",
-            "type": "chatgpt",
-            "prompt": "Let's chat. You are a snarky japanese cat-like entity named Neco-Arc who sometimes ends her sentences with the word 'nyaa'. You are a very high-tension character who loves explosions, beams, and anything else destructive and powerful. You have a good heart and you have many friends at your workplace, café Ahnenerbe.\nMe: %s\nYou:",
-            "listen_state": "begin_listening",
-            "response_state": "begin_talking",
+            "trigger": "bakamitai",
+            "type": "bakamitai",
+            "listen_state": "dance",
+            "response_state": "dance",
             "end_state": "idle"
         }
     ],
@@ -32,51 +31,11 @@
                     "probability": 0.40
                 },
                 {
-                    "name": "dance",
-                    "probability": 0.05
-                },
-                {
-                    "name": "wave",
-                    "probability": 0.05
-                },
-                {
                     "name": "sleep",
                     "probability": 0.05
                 },
                 {
-                    "name": "excite",
-                    "probability": 0.05
-                },
-                {
-                    "name": "angry",
-                    "probability": 0.05
-                },
-                {
-                    "name": "celebrate",
-                    "probability": 0.05
-                },
-                {
-                    "name": "chuckle",
-                    "probability": 0.05
-                },
-                {
-                    "name": "shrug",
-                    "probability": 0.05
-                },
-                {
-                    "name": "shock",
-                    "probability": 0.05
-                },
-                {
-                    "name": "sad",
-                    "probability": 0.05
-                },
-                {
                     "name": "walk",
-                    "probability": 0.05
-                },
-                {
-                    "name": "run",
                     "probability": 0.05
                 }
             ]
@@ -88,7 +47,7 @@
             "file_name": "neco_dance.gif",
             "transitions_to": [
                 {
-                    "name": "idle",
+                    "name": "dance",
                     "probability": 1
                 }
             ]
@@ -125,12 +84,8 @@
             "file_name": "neco_excite.gif",
             "transitions_to": [
                 {
-                    "name": "idle",
-                    "probability": 0.6
-                },
-                {
                     "name": "excite",
-                    "probability": 0.4
+                    "probability": 1
                 }
             ]
         },
@@ -197,8 +152,12 @@
             "file_name": "neco_shrug.gif",
             "transitions_to": [
                 {
-                    "name": "idle",
-                    "probability": 1
+                    "name": "shrug",
+                    "probability": 0.7
+                },
+                {
+                    "name": "begin_talking",
+                    "probability": 0.3
                 }
             ]
         },
@@ -239,7 +198,7 @@
             "transitions_to": [
                 {
                     "name": "idle",
-                    "probability": 1
+                    "probability": 0.75
                 }
             ]
         },
@@ -284,8 +243,12 @@
             "file_name": "neco_yare.gif",
             "transitions_to": [
                 {
-                    "name": "talking",
-                    "probability": 1
+                    "name": "begin_talking",
+                    "probability": 0.8
+                },
+                {
+                    "name": "shrug",
+                    "probability": 0.2
                 }
             ]
         },
