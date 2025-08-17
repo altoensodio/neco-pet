@@ -2,13 +2,22 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
+def reload_plugins(plugin_entries, load_plugins, window):
+    for plugin in plugin_entries:
+        if plugin["plugin"].get("stop"):
+            plugin["plugin"]["stop"](window.pet)
+    load_plugins()
+
 def create_context_menu(
     window,
     event,
+    load_plugins,
+    loaded_scripts,
+    run_script,
+    load_scripts,
     plugin_entries,
     show_reminders_callback,
     set_reminder_callback,
-    play_sound_callback,
     quit_callback
 ):
     menu = Gtk.Menu()
@@ -18,11 +27,19 @@ def create_context_menu(
     reminder_menu = Gtk.Menu()
     alarm_menu = Gtk.Menu()
     plugins_menu = Gtk.Menu()
-    
+    scripts_menu = Gtk.Menu()
+
     #Plugins Submenu
+    # Reload Plugins
+    plugin_reload = Gtk.MenuItem(label="Reload Plugins")
+    plugin_reload.connect("activate", lambda w: reload_plugins(plugin_entries, load_plugins, window))
+    plugins_menu.append(plugin_reload)
+
+    plugins_menu.append(Gtk.SeparatorMenuItem())
+
     # Load plugin items
     if plugin_entries:
-        for entry in plugin_entries:
+        for entry in sorted(plugin_entries, key=lambda e: e["plugin"]["label"]):
             label = entry["plugin"]["label"]
             menu_item = Gtk.MenuItem(label=label)
             menu_item_ref = entry.get("menu_item_ref")
@@ -40,6 +57,29 @@ def create_context_menu(
     plugins_menu_item = Gtk.MenuItem(label="Plugins")
     plugins_menu_item.set_submenu(plugins_menu)
     menu.append(plugins_menu_item)
+
+    #Scripts Submenu
+    # Reload Scripts
+    script_reload = Gtk.MenuItem(label="Reload Scripts")
+    script_reload.connect("activate", lambda _: load_scripts())
+    scripts_menu.append(script_reload)
+
+    scripts_menu.append(Gtk.SeparatorMenuItem())
+
+    if loaded_scripts:
+        for script_name in loaded_scripts:
+            item = Gtk.MenuItem(label=script_name)
+            item.connect("activate", lambda w, name=script_name: run_script(name, window))
+            scripts_menu.append(item)
+    else:
+        no_scripts_item = Gtk.MenuItem(label="No scripts available")
+        no_scripts_item.set_sensitive(False)
+        scripts_menu.append(no_scripts_item)
+
+    scripts_menu.show_all()
+    scripts_menu_item = Gtk.MenuItem(label="Scripts")
+    scripts_menu_item.set_submenu(scripts_menu)
+    menu.append(scripts_menu_item)
 
     # Reminder Submenu
     show_item = Gtk.MenuItem(label="Show Reminders")
@@ -61,17 +101,11 @@ def create_context_menu(
     timers_menu_item = Gtk.MenuItem(label="Timers")
     timers_menu_item.set_submenu(timers_menu)
     menu.append(timers_menu_item)
-
-    # Play random sound
-    sound_item = Gtk.MenuItem(label="Play Random Sound")
-    sound_item.connect("activate", play_sound_callback)
-    menu.append(sound_item)
-
+    menu.append(Gtk.SeparatorMenuItem())
     # Quit item
     quit_item = Gtk.MenuItem(label="Quit")
     quit_item.connect("activate", quit_callback)
     menu.append(quit_item)
-
     # Optional Close (no-op)
     close_item = Gtk.MenuItem(label="Close")
     menu.append(close_item)

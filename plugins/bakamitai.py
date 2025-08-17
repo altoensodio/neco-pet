@@ -12,6 +12,7 @@ plugin = {
     "label": "Sing Baka Mitai",
     "callback": lambda pet, window: toggle_bakamitai(pet),
     "menu_item_ref": menu_item_ref,
+    "stop": lambda pet: stop_bakamitai(pet)
 }
 
 def play_bakamitai(pet):
@@ -34,6 +35,7 @@ def play_bakamitai(pet):
     GLib.timeout_add(500, check_playing)
 
 def stop_bakamitai(pet):
+    if not is_playing: return
     bakamitai_sound.stop()
     pet.set_state("idle")
     plugin["label"] = "Sing Baka Mitai"

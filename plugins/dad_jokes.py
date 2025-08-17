@@ -1,4 +1,4 @@
-import asyncio, requests, aiohttp, gi
+import asyncio, aiohttp, gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import GLib
 
@@ -25,6 +25,6 @@ async def fetch_joke_async(window):
         GLib.idle_add(window.show_dialogue_bubble, f"Error: {str(e)}", 10)
 
 plugin = {
-    "label": "Dad joke",
+    "label": "Dad Joke",
     "callback": joke
 }

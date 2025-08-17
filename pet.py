@@ -72,7 +72,7 @@ class Pet:
         self.window = window
         self.current_state = list(states.values())[0]
         self.animation_iter = None
-        self.x, self.y = 45, 800
+        self.x, self.y = 45, 700
         self.reset_animation()
 
     def reset_animation(self):
@@ -90,7 +90,6 @@ class Pet:
         self.x += self.current_state.dx
         self.y += self.current_state.dy
         return pixbuf
-
 
     def __state_change(self):
         next_state_name = self.current_state.next_states.get_rand()
