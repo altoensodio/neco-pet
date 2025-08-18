@@ -2,7 +2,7 @@ import os, asyncio
 from gi.repository import Gtk, GLib
 from functools import partial
 
-def set_reminder_dialog(parent_window, active_reminders, save_reminders_to_file, pet, sound_objects, loop, callback):
+def set_reminder_dialog(parent_window, active_reminders, save_reminders_to_file, pet, sound_objects, scripts, loop, callback, run_script):
     dialog = Gtk.Dialog(
         title="Set Reminder",
         transient_for=parent_window,
@@ -36,35 +36,25 @@ def set_reminder_dialog(parent_window, active_reminders, save_reminders_to_file,
     sound_combo.set_active(0)
     box.add(sound_combo)
 
-    sound_button = Gtk.Button(label="Add Sound...")
-    box.add(sound_button)
-    sound_label = Gtk.Label(label="No file selected")
-    box.add(sound_label)
+    box.add(Gtk.Label(label="Attach script:"))
+    script_store = Gtk.ListStore(str)
+    script_store.append(["None"])
+    for script in scripts:
+        script_store.append([script])
+    script_combo = Gtk.ComboBox.new_with_model(script_store)
+    renderer_text = Gtk.CellRendererText()
+    script_combo.pack_start(renderer_text, True)
+    script_combo.add_attribute(renderer_text, "text", 0)
+    script_combo.set_active(0)
+    box.add(script_combo)
 
-    selected_sound = [None]  # mutable container to hold selected sound file path
+    #for later...
+    # # sound_button = Gtk.Button(label="Add Sound...")
+    # # box.add(sound_button)
+    # # sound_label = Gtk.Label(label="No file selected")
+    # # box.add(sound_label)
 
-    def on_select_sound(_):
-        fc = Gtk.FileChooserDialog(
-            title="Choose sound file",
-            parent=parent_window,
-            action=Gtk.FileChooserAction.OPEN,
-            buttons=(Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL, Gtk.STOCK_OPEN, Gtk.ResponseType.ACCEPT)
-        )
-        filter_sound = Gtk.FileFilter()
-        filter_sound.set_name("Audio files")
-        filter_sound.add_pattern("*.wav")
-        filter_sound.add_pattern("*.ogg")
-        filter_sound.add_pattern("*.mp3")
-        fc.add_filter(filter_sound)
-
-        response = fc.run()
-        if response == Gtk.ResponseType.ACCEPT:
-            filename = fc.get_filename()
-            sound_label.set_text(os.path.basename(filename))
-            selected_sound[0] = filename
-        fc.destroy()
-
-    sound_button.connect("clicked", on_select_sound)
+    # selected_sound = [None]  # mutable container to hold selected sound file path
 
     dialog.show_all()
     response = dialog.run()
@@ -79,6 +69,11 @@ def set_reminder_dialog(parent_window, active_reminders, save_reminders_to_file,
         if sound_iter:
             sound_name = sound_store[sound_iter][0]
 
+        script_iter = script_combo.get_active_iter()
+        script_name = None
+        if script_iter and script_iter != "None":
+            script_name = script_store[script_iter][0]
+
         delay_seconds = parse_delay(delay_str)
         if delay_seconds is None:
             print("Invalid delay format.")
@@ -90,7 +85,8 @@ def set_reminder_dialog(parent_window, active_reminders, save_reminders_to_file,
             "message": message,
             "delay": delay_seconds,
             "repeat": repeat,
-            "sound": sound_name
+            "sound": sound_name,
+            "script": script_name
         })
         save_reminders_to_file()
 
@@ -101,12 +97,15 @@ def set_reminder_dialog(parent_window, active_reminders, save_reminders_to_file,
             message,
             pet,
             sound_objects,
+            scripts,
             sound_name,
+            script_name,
             repeat,
             active_reminders,
             save_reminders_to_file,
             loop,
-            callback
+            callback,
+            run_script
         )
         dialog.destroy()
         return reminder_task, active_reminders[-1]  # Return task and reminder dict
@@ -115,7 +114,7 @@ def set_reminder_dialog(parent_window, active_reminders, save_reminders_to_file,
     return None, None
 
 
-def add_reminder(delay_seconds, parent_window, message, pet, sound_objects, sound_name, repeat, active_reminders, save_reminders_to_file, loop, callback):
+def add_reminder(delay_seconds, parent_window, message, pet, sound_objects, scripts, sound_name, script_name, repeat, active_reminders, save_reminders_to_file, loop, callback, run_script):
     async def reminder_task():
         print(f"[Reminder] Scheduled: {message} in {delay_seconds}s (repeat={repeat})")
         
@@ -125,10 +124,10 @@ def add_reminder(delay_seconds, parent_window, message, pet, sound_objects, soun
 
             # Show reminder and play sound on main GTK thread
             def trigger_and_cleanup():
-                show_reminder(parent_window, message, pet, sound_objects, sound_name)
+                show_reminder(parent_window, message, pet, sound_objects, scripts, sound_name, script_name, run_script)
                 if not repeat:
                     # Cleanup only once
-                    remove_reminder_by_identity(message, delay_seconds, repeat, active_reminders, save_reminders_to_file)
+                    remove_reminder_by_identity(message, delay_seconds, repeat, sound_name, script_name,active_reminders, save_reminders_to_file)
                 return False  # Run once
 
             GLib.idle_add(trigger_and_cleanup)
@@ -141,15 +140,15 @@ def add_reminder(delay_seconds, parent_window, message, pet, sound_objects, soun
     callback(task)
     return task
 
-def remove_reminder_by_identity(message, delay, repeat, active_reminders, save_reminders_to_file):
+def remove_reminder_by_identity(message, delay, repeat, sound_name, script_name, active_reminders, save_reminders_to_file):
     for i, rem in enumerate(active_reminders):
-        if rem["message"] == message and rem["delay"] == delay and rem.get("repeat", False) == repeat:
+        if rem["message"] == message and rem["delay"] == delay and rem.get("repeat", False) == repeat and rem["sound"] == sound_name and rem["script"] == script_name:
             print(f"[Reminder] Removing one-time reminder: {rem}")
             del active_reminders[i]
             save_reminders_to_file()
             break
 
-def show_reminder(parent_window, message, pet, sound_objects, sound_name=None):
+def show_reminder(parent_window, message, pet, sound_objects, scripts, sound_name=None, script_name=None, run_script=None):
     dialog = Gtk.MessageDialog(
         parent=parent_window,
         modal=True,
@@ -160,10 +159,20 @@ def show_reminder(parent_window, message, pet, sound_objects, sound_name=None):
     )
     dialog.format_secondary_text(message)
     pet.set_state("excite")
+
+    #play sound
     if sound_name and sound_name in sound_objects:
         sound_objects[sound_name].play()
     elif "ima_doko" in sound_objects:
         sound_objects["ima_doko"].play()
+    
+    #if script run
+    if script_name in scripts:
+        try:
+            print(f"[Reminder] Running '{script_name}'")
+            run_script(script_name, parent_window)
+        except Exception as e:
+            print(f"[Reminder] Error while trying to run '{script_name}': {e}")
 
     dialog.run()
     dialog.destroy()

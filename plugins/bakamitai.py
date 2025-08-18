@@ -51,7 +51,7 @@ def toggle_bakamitai(pet):
         play_bakamitai(pet)
         is_playing = True
 
-def init():
+def init(pet, window):
     global bakamitai_sound
     if os.path.exists(sound_path):
         bakamitai_sound = pygame.mixer.Sound(sound_path)

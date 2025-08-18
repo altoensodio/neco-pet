@@ -1,11 +1,15 @@
 import os
 from pygame import mixer
+from random import choice
 
 class SoundManager:
     def __init__(self):
         mixer.init()
         self.sound_objects = {}
         self.load_sounds()
+
+    def get_sound_objects(self):
+        return self.sound_objects
 
     def load_sounds(self):
         sounds = [
@@ -23,3 +27,11 @@ class SoundManager:
             for s in sounds:
                 if s != "ima_doko" and s in self.sound_objects:
                     self.sound_objects[s].set_volume(vol)
+    
+    def play_random_sound(self):
+        sounds = list(self.sound_objects.values())
+        if sounds:
+            try:
+                choice(sounds).play()
+            except Exception as e:
+                print("Error while trying to play sound: {e}")

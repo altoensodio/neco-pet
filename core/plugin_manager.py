@@ -15,7 +15,7 @@ class PluginManager:
         for mod in self.plugins:
             if hasattr(mod, "init") and callable(mod.init):
                 try:
-                    mod.init()
+                    mod.init(self.pet, self.window)
                 except Exception as e:
                     print(f"[PluginManager] Error in init() for {mod.__name__}: {e}")
 

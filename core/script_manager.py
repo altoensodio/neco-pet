@@ -29,14 +29,14 @@ class ScriptManager:
         elif ext == ".py":
             cmd = ["python3", script_path]
         else:
-            GLib.idle_add(window.show_dialogue_bubble, "Unsupported script type.", 10)
+            GLib.idle_add(window.dialogue_manager.show_dialogue_bubble, "Unsupported script type.", 10)
             return
 
         try:
             result = subprocess.run(cmd, capture_output=True, text=True)
             output = result.stdout.strip() or "Script ran with no output."
-            GLib.idle_add(window.show_dialogue_bubble, output, 10)
-            window.play_random_sound()
+            GLib.idle_add(window.dialogue_manager.show_dialogue_bubble, output, 10)
+            window.sound_manager.play_random_sound()
         except Exception as e:
             err = f"Error running script: {e}"
-            GLib.idle_add(window.show_dialogue_bubble, err, 10)
+            GLib.idle_add(window.dialogue_manager.show_dialogue_bubble, err, 10)

@@ -28,16 +28,16 @@ async def fetch_weather_async(window):
                     temp = data['main']['temp']
                     msg = f"Weather in {CITY}: {weather} ({desc}), {temp}°C"
                     print(msg)
-                    GLib.idle_add(window.show_dialogue_bubble, msg, 10)
-                    window.play_random_sound()
+                    GLib.idle_add(window.dialogue_manager.show_dialogue_bubble, msg, 10)
+                    window.sound_manager.play_random_sound()
                 else:
                     fail_msg = f"Failed to fetch weather: {resp.status}"
                     print(fail_msg)
-                    GLib.idle_add(window.show_dialogue_bubble, fail_msg, 10)
+                    GLib.idle_add(window.dialogue_manager.show_dialogue_bubble, fail_msg, 10)
     except Exception as e:
         err_msg = f"Error: {str(e)}"
         print(err_msg)
-        GLib.idle_add(window.show_dialogue_bubble, err_msg, 10)
+        GLib.idle_add(window.dialogue_manager.show_dialogue_bubble, err_msg, 10)
 
 plugin = {
     "label": "Weather",

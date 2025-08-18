@@ -1,16 +1,16 @@
-import gi, json, random, pygame
-gi.require_version('GdkPixbuf', '2.0')
-gi.require_version('Gtk', '3.0')
+import json, pygame
 from os import makedirs
 from os.path import join, expanduser, exists
 from pygame import mixer
+from gi import require_versions
+require_versions({'Gtk': '3.0', 'GdkPixbuf': '2.0'})
 from gi.repository import Gtk, Gdk, GLib, GdkPixbuf
 from typing import Callable
-
+from random import randint, choice
 from pet import Pet, PetState
 from utils import reminder_utils, alarm_utils
-from ui import DialogueBubble, create_context_menu
-from core import PluginManager, SoundManager, ScriptManager
+from ui import create_context_menu
+from core import PluginManager, SoundManager, ScriptManager, ReminderManager, DialogueManager
 
 class NecoArcWindow(Gtk.Window):   
     def __init__(self, assets_path, loop):
@@ -29,13 +29,6 @@ class NecoArcWindow(Gtk.Window):
         #async loop
         self.loop = loop
 
-        #lists
-        self.random_dialogues = []
-        self.active_reminders = []
-        self.active_async_tasks = []
-
-        self.dialogue_bubble = None
-
         #drag values
         self.dragging = False
         self.drag_offset_x = 0
@@ -53,24 +46,34 @@ class NecoArcWindow(Gtk.Window):
 
         #start sound and related
         try:
-            mixer.init()
             self.sound_manager = SoundManager()
-            self.sound_objects = self.sound_manager.sound_objects
         except pygame.error as e:
             print(f"[Sound Error] Could not initialize audio: {e}")
-            self.sound_objects = {}
+
+        #create .config dir
+        makedirs(self.config_dir, exist_ok=True)
+
+        #load dialogues
+        self.dialogue_manager = DialogueManager(window=self, pet=self.pet, config_dir=self.config_dir)
+        self.dialogue_manager.load_random_dialogues()
 
         #load plugin and scripts
         self.load_plugins()
         self.load_scripts()
 
-        #create .config dir
-        makedirs(self.config_dir, exist_ok=True)
+        #reminder system stuff
+        self.reminder_manager = ReminderManager(
+            window=self,
+            config_dir=self.config_dir,
+            loop=self.loop,
+            pet=self.pet,
+            sound_objects=self.sound_manager.get_sound_objects(),
+            script_manager=self.script_manager,
+            json_handler=self.json_handler
+        )
 
-        #load random dialogues and reactivate reminders
-        self.load_random_dialogues()
-        self.load_reminders_from_file()
-        self.reactivate_reminders()
+        self.reminder_manager.load_from_file()
+        self.reminder_manager.reactivate_reminders()
 
         #button presses handlers and others
         self.connect("destroy", Gtk.main_quit)
@@ -87,15 +90,15 @@ class NecoArcWindow(Gtk.Window):
 
         #random dialogue timer
         def periodic_random_dialogue():
-            self.random_dialogue()
-            next_delay = random.randint(120000, 300000)
+            self.dialogue_manager.random_dialogue()
+            next_delay = randint(120000, 300000)
             GLib.timeout_add(next_delay, periodic_random_dialogue)
             return False
 
         #timeouts
-        GLib.timeout_add(random.randint(120000, 300000), periodic_random_dialogue) # between 2 and 5min
+        GLib.timeout_add(randint(120000, 300000), periodic_random_dialogue) # between 2 and 5min
         GLib.timeout_add(100, self.update_frame)
-        GLib.timeout_add(30, self.update_dialogue_bubble)
+        GLib.timeout_add(30, self.dialogue_manager.update_dialogue_bubble)
 
     def json_handler(self, path, write=False, data=None, default=None):
         try:
@@ -124,13 +127,6 @@ class NecoArcWindow(Gtk.Window):
         pixbuf = self.pet.next_frame()
         self.image.set_from_pixbuf(pixbuf)
         self.move(self.pet.x, self.pet.y)
-        return True
-
-    def update_dialogue_bubble(self):
-        if hasattr(self, "dialogue_bubble") and self.dialogue_bubble:
-            pet_x, pet_y = self.get_position()
-            pet_w, _ = self.get_size()
-            self.dialogue_bubble.move_to_pet(pet_x, pet_y, pet_w)
         return True
     #--
 
@@ -166,7 +162,7 @@ class NecoArcWindow(Gtk.Window):
         if event.button == 1:
             self.dragging = False
             if not self._mouse_was_drag:
-                self.random_dialogue()
+                self.dialogue_manager.random_dialogue()
         return True
     #--
 
@@ -181,115 +177,25 @@ class NecoArcWindow(Gtk.Window):
             loaded_scripts=self.script_manager.get_scripts(),
             plugin_entries=self.plugin_manager.get_menu_entries(),
             show_reminders_callback=lambda _: reminder_utils.show_reminders_dialog(
-                active_async_tasks=self.active_async_tasks,
+                active_async_tasks=self.reminder_manager.active_async_tasks,
                 parent_window=self,
-                active_reminders=self.active_reminders,
-                delete_callback=self.delete_reminder,
-                save_reminders_to_file=self.save_reminders_to_file,
+                active_reminders=self.reminder_manager.active_reminders,
+                delete_callback=self.reminder_manager.delete_reminder,
+                save_reminders_to_file=self.reminder_manager.save_to_file,
             ),
             set_reminder_callback=lambda _: reminder_utils.set_reminder_dialog(
                 parent_window=self,
-                active_reminders=self.active_reminders,
-                save_reminders_to_file=self.save_reminders_to_file,
+                active_reminders=self.reminder_manager.active_reminders,
+                save_reminders_to_file=self.reminder_manager.save_to_file,
                 pet=self.pet,
-                sound_objects=self.sound_objects,
+                scripts=self.script_manager.get_scripts(),
+                sound_objects=self.sound_manager.get_sound_objects(),
                 loop=self.loop,
-                callback=self.add_task
+                callback=self.reminder_manager.add_task,
+                run_script=self.script_manager.run_script
             ),
             quit_callback=self.on_quit_activated
         )
-    #--
-
-    #Alarm stuff
-    def open_alarm_dialog(self):
-        if not hasattr(self, "active_alarms"):
-            self.active_alarms = []
-        alarm_utils.alarm_dialog(
-            parent_window=self,
-            active_alarms=self.active_alarms,
-            save_alarms_to_file=self.save_alarms_to_file,
-            pet=self.pet,
-            sound_objects=self.sound_objects
-        )
-
-    def save_alarms_to_file(self):
-        makedirs(self.config_dir, exist_ok=True)
-        self.json_handler(join(self.config_dir, "alarms.json"), True, self.active_alarms)
-    #--
-
-    #Reminder stuff
-    def add_task(self, task):
-        self.active_async_tasks.append(task)
-
-    def show_reminders(self):
-        reminder_utils.show_reminders_dialog(
-            parent_window=self,
-            active_reminders=self.active_reminders,
-            active_async_tasks=self.active_async_tasks,
-            delete_callback=self.delete_reminder,
-            save_reminders_to_file=self.save_reminders_to_file
-        )
-
-    def open_reminder_dialog(self):
-        reminder_utils.reminder_dialog(
-            parent_window=self,
-            active_reminders=self.active_reminders,
-            save_reminders_to_file=self.save_reminders_to_file,
-            pet=self.pet,
-            sound_objects=self.sound_objects
-        )
-
-    def reactivate_reminders(self):
-        self.active_reminders = self.json_handler(join(self.config_dir, "reminders.json"))
-
-        for reminder in self.active_reminders:
-             task = reminder_utils.add_reminder(
-                delay_seconds = reminder["delay"],
-                message = reminder["message"],
-                sound_name = reminder["sound"],
-                repeat = reminder["repeat"],
-                pet=self.pet,
-                parent_window=self,
-                sound_objects=self.sound_objects,
-                active_reminders=self.active_reminders,
-                save_reminders_to_file=self.save_reminders_to_file,
-                loop=loop,
-                callback=self.add_task
-            )
-
-        # Save new IDs to file
-        self.save_reminders_to_file()
-        if len(self.active_reminders) != len(self.active_async_tasks):
-            print("[Reminder] Warning: Mismatch between reminders and tasks!")
-
-    def delete_reminder(self, index):
-        print(self.active_async_tasks)
-        print(self.active_reminders)
-        if 0 <= index < len(self.active_reminders):
-            print(f"[Reminder] Deleting reminder at index {index}")
-            try:
-                task = self.active_async_tasks[index]
-                task.cancel()
-                print(f"[Reminder] Cancelled task at index {index}")
-            except IndexError:
-                print("[Reminder] No task found to cancel at that index.")
-
-            removed = self.active_reminders.pop(index)
-            self.active_async_tasks.pop(index) 
-
-            print(f"[Reminder] Removed reminder: {removed}")
-            self.save_reminders_to_file()
-
-    def save_reminders_to_file(self):
-        makedirs(self.config_dir, exist_ok=True)
-        self.json_handler(join(self.config_dir, "reminders.json"), True, self.active_reminders)
-    
-    def load_reminders_from_file(self):
-        if exists(self.config_dir):
-            self.active_reminders = self.json_handler(join(self.config_dir, "reminders.json"))
-            self.save_reminders_to_file()
-        else:
-            self.active_reminders = []
     #--
 
     #Quit stuff
@@ -315,50 +221,4 @@ class NecoArcWindow(Gtk.Window):
         response = dialog.run()
         dialog.destroy()
         return response == Gtk.ResponseType.YES
-    #--
-
-    #Dialogues
-    def show_dialogue_bubble(self, message, duration=5):
-        if self.dialogue_bubble:
-            try:
-                self.dialogue_bubble.close_bubble()
-            except Exception as e:
-                err_msg = f"Error: {str(e)}"
-                print(err_msg)
-        anim = ["begin_talking", "shrug"]
-        self.pet.set_state(random.choice(anim))
-
-        bubble = DialogueBubble(message, duration=duration, parent=self)
-        bubble.on_close_callback = lambda: self.pet.set_state("idle")
-        pet_x, pet_y = self.get_position()
-        pet_w, _ = self.get_size()
-        bubble.move_to_pet(pet_x, pet_y, pet_w)
-        self.dialogue_bubble = bubble
-
-    def load_random_dialogues(self):
-        path = join(self.config_dir, "random_dialogues.json")
-        try:
-            if exists(path):
-                self.random_dialogues = self.json_handler(path)
-            else:
-                content = [{"dialogue": "test dialogue :3"}]
-                self.json_handler(path, True, content)
-                self.random_dialogues = content
-        except Exception as e:
-            print(f"Error loading random_dialogues.json: {e}")
-            self.show_dialogue_bubble(f"Error loading random_dialogues.json: {e}", 10)
-
-    def random_dialogue(self):
-        if not self.random_dialogues:
-            print("[Dialogue] No dialogues loaded.")
-            return
-        self.show_dialogue_bubble(random.choice(self.random_dialogues)["dialogue"], duration=10)
-        self.play_random_sound()
-    #--
-
-    #i dont know where to classify this so it goes here
-    def play_random_sound(self):
-        sounds = list(self.sound_objects.values())
-        if sounds:
-            random.choice(sounds).play()
     #--
